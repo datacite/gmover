@@ -28,4 +28,26 @@ of taking this thing and tweaking it to what you need and never needing
 it again.  Note this is also the first python I've done from scratch that
 didn't involve the words hello and world.
 
+## DataCite Changes
 
+* added `client_secret.json` and `*.mbox` to `.gitignore` file
+* added `quickstart.py` and documentation from [Google Groups Migration API documentation](https://developers.google.com/admin-sdk/groups-migration/v1/quickstart/python)
+
+## Usage
+
+### Run the sample script
+
+Follow the instructions at [Google Groups Migration API documentation](https://developers.google.com/admin-sdk/groups-migration/v1/quickstart/python), including enabling access to the Google Groups MIgration API and installing the Python Google client library.
+
+```
+python quickstart.py
+```
+
+### Run the main script
+
+Required parameters are group email address and mbox filename.
+
+```
+python gmover.py -g test@example.org -f example.mbox
+
+```
