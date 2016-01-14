@@ -44,7 +44,7 @@ def get_credentials():
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
     credential_path = os.path.join(credential_dir,
-                                   'groupsmigration-quickstart.json')
+                                   'groupsmigration-python-quickstart.json')
 
     store = oauth2client.file.Storage(credential_path)
     credentials = store.get()
@@ -53,24 +53,24 @@ def get_credentials():
         flow.user_agent = APPLICATION_NAME
         if flags:
             credentials = tools.run_flow(flow, store, flags)
-        else: # Needed only for compatability with Python 2.6
+        else: # Needed only for compatibility with Python 2.6
             credentials = tools.run(flow, store)
-        print 'Storing credentials to ' + credential_path
+        print('Storing credentials to ' + credential_path)
     return credentials
 
 def main():
-    """The core of the code is from one of the examples of the 
+    """The core of the code is from one of the examples of the
     Google Admin-SDK Groups Migration API developer page.
-    
+
     The gluing and tweaking is by Ron Jarrell, Manager for Ecommunications
     Services at Virgina Tech.  You can contact him at jarrell@vt.edu.
     If this helps you, feel free to drop a line, or send a postcard :)
 
     Creates a Google Admin-SDK Groups Migration API service object and
     inserts all mail in an mbox into a group.
-    
+
     Note, this was written to solve a problem.  Migrating a listserv, which
-    generates archives that are very mbox like, and can be made an mbox with 
+    generates archives that are very mbox like, and can be made an mbox with
     a simple edit, to google groups.  The archives turned out to uniformly
     not have message-id's, which is bad.
 

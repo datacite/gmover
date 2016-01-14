@@ -37,7 +37,7 @@ didn't involve the words hello and world.
 
 ### Run the sample script
 
-Follow the instructions at [Google Groups Migration API documentation](https://developers.google.com/admin-sdk/groups-migration/v1/quickstart/python), including enabling access to the Google Groups MIgration API and installing the Python Google client library.
+Follow the instructions at [Google Groups Migration API documentation](https://developers.google.com/admin-sdk/groups-migration/v1/quickstart/python), including enabling access to the Google Groups Migration API and installing the Python Google client library.
 
 ```
 python quickstart.py
