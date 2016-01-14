@@ -3,6 +3,7 @@ import os
 import mailbox
 import StringIO
 import random
+import logging
 
 import apiclient
 from apiclient import discovery
@@ -18,10 +19,12 @@ from email import MIMEText
 try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser])
-    flags.add_argument('-g','--group',required=True)
-    flags.add_argument('-f','--file',required=True)
-    flags.add_argument('-v','--verbose')
+    flags.add_argument('-g','--group', help="Google group email address", required=True)
+    flags.add_argument('-f','--file', help="filepath of mbox file", required=True)
+    flags.add_argument('-v','--verbose', help="increase output verbosity")
     args = flags.parse_args()
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
 except ImportError:
     flags = None
 
@@ -90,28 +93,22 @@ def main():
 
     groupId = args.group
 
-    if args.verbose > 0:
-        print "Processing " + args.file
+    logging.debug("Processing " + args.file)
+
+    print(result['responseCode'])
     for message in mailbox.mbox(args.file):
         if not message['Message-ID']:
-            message['Message-ID'] = '<{0}-{1}-groupmover-{2}'.format(str(random.randrange(10**10)),
-			       str(random.randrange(10**10)),
+            message['Message-ID'] = '<{0}-{1}>'.format(str(random.randrange(10**10)),
                                                groupId)
-            if args.verbose > 1:
-                print "Creating message id " + message['Message-ID']
         stream = StringIO.StringIO()
         stream.write(message.as_string())
-        if args.verbose > 2:
-            print "Generating payload"
         media = apiclient.http.MediaIoBaseUpload(stream,
                                                  mimetype='message/rfc822')
 
-        if args.verbose > 2:
-            print "Inserting"
+        logging.debug("Inserting message " + message['Message-ID'])
         result = service.archive().insert(groupId=groupId,
                                           media_body=media).execute()
-        if result['responseCode'] <> 'SUCCESS' or args.verbose > 2:
-           print result['responseCode']
+        print(result['responseCode'])
 
 if __name__ == '__main__':
     main()
