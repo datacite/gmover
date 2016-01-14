@@ -21,7 +21,7 @@ try:
     flags = argparse.ArgumentParser(parents=[tools.argparser])
     flags.add_argument('-g','--group', help="Google group email address", required=True)
     flags.add_argument('-f','--file', help="filepath of mbox file", required=True)
-    flags.add_argument('-v','--verbose', help="increase output verbosity")
+    flags.add_argument('-v','--verbose', help="increase output verbosity", action="store_true")
     args = flags.parse_args()
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
@@ -93,9 +93,8 @@ def main():
 
     groupId = args.group
 
-    logging.debug("Processing " + args.file)
+    logging.debug("Processing " + args.file + " for group " + groupId)
 
-    print(result['responseCode'])
     for message in mailbox.mbox(args.file):
         if not message['Message-ID']:
             message['Message-ID'] = '<{0}-{1}>'.format(str(random.randrange(10**10)),
@@ -104,11 +103,16 @@ def main():
         stream.write(message.as_string())
         media = apiclient.http.MediaIoBaseUpload(stream,
                                                  mimetype='message/rfc822')
+        try:
+            result = service.archive().insert(groupId=groupId,
+                                              media_body=media).execute()
+            logging.debug(result['responseCode'] + " inserting message " + message['Message-ID'])
+        except googleapiclient.errors.HttpError as err:
+            logging.error("Error inserting message " + message['Message-ID'])
+            logging.error(err)
+            logging.debug(message.as_string())
 
-        logging.debug("Inserting message " + message['Message-ID'])
-        result = service.archive().insert(groupId=groupId,
-                                          media_body=media).execute()
-        print(result['responseCode'])
+    print(result['responseCode'])
 
 if __name__ == '__main__':
     main()

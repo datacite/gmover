@@ -32,6 +32,8 @@ didn't involve the words hello and world.
 
 * added `client_secret.json` and `*.mbox` to `.gitignore` file
 * added `quickstart.py` and documentation from [Google Groups Migration API documentation](https://developers.google.com/admin-sdk/groups-migration/v1/quickstart/python)
+* modified logging. Use the `-v` flag to enable log level `DEBUG`
+* basic error handling
 
 ## Usage
 
@@ -45,7 +47,7 @@ python quickstart.py
 
 ### Run the main script
 
-Required parameters are group email address and mbox filename.
+Required parameters are group email address and mbox filename. Use the `-v` flag for verbose output, and `-h` for help.
 
 ```
 python gmover.py -g test@example.org -f example.mbox
